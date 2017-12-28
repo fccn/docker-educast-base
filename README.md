@@ -7,22 +7,28 @@ Minimal docker image from which Educast application containers can be built.
 The docker image is based on Alpine and has the following specs:
 
 - Ruby 2.4
-- FFMpeg 3.3.2
+- FFMpeg 3.3.5
 - Timezone set to Europe/Lisbon
 - Creates educast user (501) and group (1000)
 - Pre-installs a set of utilities such as: bzip2, openssh, git, nodejs, mariadb, imagemagick
 
+The image size is 765MB
 
 ### FFmpeg info
 
 ```
-ffmpeg version 3.3.2 Copyright (c) 2000-2017 the FFmpeg developers
-  built with gcc 6.3.0 (Alpine 6.3.0)
-  configuration: --enable-version3 --enable-gpl --enable-nonfree --enable-small 
-  --enable-libmp3lame --enable-libfdk_aac --enable-libx264 --enable-libx265 
-  --enable-libvpx --enable-libtheora --enable-libvorbis --enable-libopus 
-  --enable-libass --enable-libwebp --enable-librtmp --enable-postproc --enable-avresample 
-  --enable-libfreetype --disable-debug --enable-static --disable-shared
+ffmpeg version 3.3.5 Copyright (c) 2000-2017 the FFmpeg developers
+  built with gcc 5.3.0 (Alpine 5.3.0)
+  configuration: --enable-version3 --enable-gpl --enable-nonfree --enable-small --enable-libmp3lame --enable-libfdk_aac --enable-libx264 --enable-libx265 --enable-libvpx --enable-libtheora --enable-libvorbis --enable-libopus --enable-libass --enable-libwebp --enable-librtmp --enable-postproc --enable-avresample --enable-libfreetype --disable-debug
+  libavutil      55. 58.100 / 55. 58.100
+  libavcodec     57. 89.100 / 57. 89.100
+  libavformat    57. 71.100 / 57. 71.100
+  libavdevice    57.  6.100 / 57.  6.100
+  libavfilter     6. 82.100 /  6. 82.100
+  libavresample   3.  5.  0 /  3.  5.  0
+  libswscale      4.  6.100 /  4.  6.100
+  libswresample   2.  7.100 /  2.  7.100
+  libpostproc    54.  5.100 / 54.  5.100
 
   configuration:
     --enable-version3
@@ -44,17 +50,6 @@ ffmpeg version 3.3.2 Copyright (c) 2000-2017 the FFmpeg developers
     --enable-avresample
     --enable-libfreetype
     --disable-debug
-    --enable-static
-    --disable-shared
-  libavutil      55. 58.100 / 55. 58.100
-  libavcodec     57. 89.100 / 57. 89.100
-  libavformat    57. 71.100 / 57. 71.100
-  libavdevice    57.  6.100 / 57.  6.100
-  libavfilter     6. 82.100 /  6. 82.100
-  libavresample   3.  5.  0 /  3.  5.  0
-  libswscale      4.  6.100 /  4.  6.100
-  libswresample   2.  7.100 /  2.  7.100
-  libpostproc    54.  5.100 / 54.  5.100
 
 ```
 
