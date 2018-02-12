@@ -32,7 +32,7 @@ RUN apk add --virtual .build-deps build-base x264 nasm
 
 #required packages
 RUN apk add --no-cache --update curl patch nasm tar bzip2 openssh git file \
-  nodejs docker bash mariadb-dev imagemagick-dev \
+  nodejs docker bash unzip mariadb-dev imagemagick-dev \
   zlib-dev yasm-dev lame-dev libogg-dev x264-dev libvpx-dev libvorbis-dev \ 
   x265-dev freetype-dev libass-dev libwebp-dev rtmpdump-dev libtheora-dev \ 
   opus-dev fdk-aac-dev@testing bash
