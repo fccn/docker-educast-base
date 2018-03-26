@@ -12,7 +12,8 @@ ENV FFMPEG_VERSION=$ffmpeg_version
 #add testing and community repositories
 RUN echo '@testing http://nl.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
   echo '@community http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
-  apk upgrade --no-cache --available
+  echo '@edge http://nl.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories && \
+  apk update && apk upgrade --no-cache --available
 
 #------ timezone and users
 
@@ -23,7 +24,7 @@ ENV TZ=Europe/Lisbon
 RUN cp /usr/share/zoneinfo/Europe/Lisbon /etc/localtime
 
 #add educast users and groups
-RUN addgroup -g 1000 educastgroup && adduser -u 501 -G educastgroup -D educast
+RUN addgroup -g 1000 educastgroup && adduser -u 501 -G educastgroup -D educast && adduser -u 1028 -G educastgroup -D educast_upload
 
 #----- install required components
 
