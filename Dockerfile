@@ -14,6 +14,7 @@ RUN echo '@testing http://nl.alpinelinux.org/alpine/edge/testing' >> /etc/apk/re
   echo '@community http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
   echo '@edge http://nl.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories && \
   apk update && apk upgrade --no-cache --available
+RUN apk add --upgrade apk-tools@edge
 
 #------ timezone and users
 
