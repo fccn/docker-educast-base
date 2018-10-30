@@ -1,11 +1,12 @@
 # Docker Educast base image
 
-Minimal docker image from which Educast application containers can be built.
+Minimal docker image with ruby and FFMpeg. Used as base image for builing Educast application containers.
 
 ## About
 
 The docker image is based on Alpine and has the following specs:
 
+- Alpine 3.7
 - Ruby 2.4
 - FFMpeg 3.3.5
 - Timezone set to Europe/Lisbon
@@ -62,8 +63,8 @@ $ cd educast_base
 $ cp deploy.env.sample deploy.env
 ```
 Use your preferred editor to open the newly created deploy.env file. The following variables can be modified:
-- **APP_NAME** - Change the image name to whatever you want (currently is set to educast_base). 
-- **DOCKER_REPO** - Define the docker repository to store the generated image. 
+- **APP_NAME** - Change the image name to whatever you want (currently is set to educast_base).
+- **DOCKER_REPO** - Define the docker repository to store the generated image.
 - **FFMPEG_VERSION** - Change the FFMpeg version (currently is set to 3.3.2).
 
 After customizing the build you can either build the image to use it locally
