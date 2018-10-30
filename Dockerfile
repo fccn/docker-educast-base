@@ -9,6 +9,7 @@ LABEL maintainer="Paulo Costa <paulo.costa@fccn.pt>"
 RUN apk add --no-cache \
   coreutils \
   freetype-dev \
+  libtheora-dev \
   openssl \
   bash \
   build-base \
@@ -102,10 +103,10 @@ RUN \
   cd opus-$OPUS_VERSION && \
   ./configure --enable-static --disable-shared && make -j$(cat /build_concurrency) install
 
-RUN \
-  wget -O - "https://downloads.xiph.org/releases/theora/libtheora-$THEORA_VERSION.tar.bz2" | tar xj && \
-  cd libtheora-$THEORA_VERSION && \
-  ./configure --enable-static --disable-shared && make -j$(cat /build_concurrency) install
+#RUN \
+#  wget -O - "https://downloads.xiph.org/releases/theora/libtheora-$THEORA_VERSION.tar.bz2" | tar xj && \
+#  cd libtheora-$THEORA_VERSION && \
+#  ./configure --enable-static --disable-shared && make -j$(cat /build_concurrency) install
 
 RUN \
   wget -O - "https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz" | tar xz && \
