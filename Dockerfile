@@ -384,5 +384,5 @@ RUN addgroup -g 1000 educastgroup && adduser -u 501 -G educastgroup -D educast &
 COPY --from=build /tmp/fakeroot/ /
 
 # sanity tests
-RUN ["/ffmpeg", "-version"]
-RUN ["/ffprobe", "-version"]
+RUN ["ffmpeg", "-version"]
+RUN ["ffprobe", "-version"]
