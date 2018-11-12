@@ -1,6 +1,6 @@
 #-----
 # base image for educast, provides a container with ruby and ffmpeg
-# - based on jrottenberg/ffmpeg image - https://hub.docker.com/r/jrottenberg/ffmpeg/
+# - based on jrottenberg/ffmpeg:4.0-scratch image - https://hub.docker.com/r/jrottenberg/ffmpeg/
 # - sets timezone to Europe/Lisbon
 # - creates educast user and group
 #------
@@ -32,7 +32,7 @@ ENV         FFMPEG_VERSION=4.0.2     \
             FONTCONFIG_VERSION=2.12.4 \
             LIBVIDSTAB_VERSION=1.1.0  \
             KVAZAAR_VERSION=1.2.0     \
-            AOM_VERSION=master        \
+            AOM_VERSION=v1.0.0        \
             SRC=/usr/local
 
 ARG         OGG_SHA256SUM="e19ee34711d7af328cb26287f4137e70630e7261b17cbe3cd41011d73a654692  libogg-1.3.2.tar.gz"
@@ -369,13 +369,18 @@ LABEL maintainer="Paulo Costa <paulo.costa@fccn.pt>"
 #RUN apk add --upgrade apk-tools@edge
 
 #------ timezone and users
-
-RUN apk --no-cache add ca-certificates && update-ca-certificates
-# Change TimeZone
-RUN apk add --update tzdata
 ENV TZ=Europe/Lisbon
-RUN cp /usr/share/zoneinfo/Europe/Lisbon /etc/localtime
 
+# Change TimeZone
+RUN apk --no-cache add ca-certificates && update-ca-certificates \
+  && apk add --update tzdata \
+  && cp /usr/share/zoneinfo/Europe/Lisbon /etc/localtime \
+  && rm -rf /var/cache/apk/*
+
+#add educast users and groups
+RUN addgroup -g 1000 educastgroup && adduser -u 501 -G educastgroup -D educast && adduser -u 1028 -G educastgroup -D educast_upload
+
+#Copy ffmpeg binary from build stage
 COPY --from=build /tmp/fakeroot/ /
 
 # sanity tests
