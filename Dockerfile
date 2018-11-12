@@ -4,11 +4,7 @@
 # - sets timezone to Europe/Lisbon
 # - creates educast user and group
 #------
-FROM ruby:2.4-alpine as base
-
-RUN     apk  add --no-cache --update libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 libgomp expat
-
-FROM        base AS build
+FROM        alpine:3.5 AS build
 
 WORKDIR     /tmp/workdir
 
@@ -59,6 +55,7 @@ RUN     buildDeps="autoconf \
                    curl \
                    coreutils \
                    diffutils \
+                   expat-dev \
                    file \
                    g++ \
                    gcc \
@@ -69,9 +66,9 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    tar \
                    yasm \
-                   zlib-dev \
-                   expat-dev" && \
-        apk  add --no-cache --update ${buildDeps}
+                   zlib-dev" && \
+        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
+
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -353,13 +350,15 @@ RUN  \
 
 
 RUN \
-    ldd ${PREFIX}/bin/ffmpeg | grep opt/ffmpeg | cut -d ' ' -f 3 | xargs -i cp {} /usr/local/lib/ && \
-    cp ${PREFIX}/bin/* /usr/local/bin/ && \
-    cp -r ${PREFIX}/share/ffmpeg /usr/local/share/ && \
-    LD_LIBRARY_PATH=/usr/local/lib ffmpeg -buildconf
+        mkdir -p /tmp/fakeroot/lib  && \
+        ldd ${PREFIX}/bin/ffmpeg | cut -d ' ' -f 3 | strings | xargs -I R cp R /tmp/fakeroot/lib/ && \
+        for lib in /tmp/fakeroot/lib/*; do strip --strip-all $lib; done && \
+        cp -r ${PREFIX}/bin /tmp/fakeroot/bin/ && \
+        cp -r ${PREFIX}/share/ffmpeg /tmp/fakeroot/share/ && \
+        LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
 
 ### Release Stage
-FROM base AS educast_base
+FROM ruby:2.4-alpine3.8 AS educast_base
 LABEL maintainer="Paulo Costa <paulo.costa@fccn.pt>"
 
 #add testing and community repositories
@@ -377,7 +376,7 @@ RUN apk add --update tzdata
 ENV TZ=Europe/Lisbon
 RUN cp /usr/share/zoneinfo/Europe/Lisbon /etc/localtime
 
-COPY --from=build /usr/local /usr/local
+COPY --from=build /tmp/fakeroot/ /
 
 # sanity tests
 RUN ["/ffmpeg", "-version"]
