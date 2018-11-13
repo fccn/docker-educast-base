@@ -7,9 +7,20 @@ pool:
   vmImage: 'Ubuntu 16.04'
 
 variables:
+  image.version: '2.0'
   imageName: 'educast_base:$(build.buildId)'
+  taggedImage: 'educast_base:$(image.version)'
+  latestImage: 'educast_base:latest'
 
 steps:
 - script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'docker build'
-- script: docker run -it $(imageName) ffmpeg -buildconf
+  displayName: 'build image'
+- script: docker run -t $(imageName) ffmpeg -buildconf
+  displayName: 'validate built image'
+- script: |
+    docker login -u $(dockerId) -p $(dockerPassword)
+    docker tag $(imageName) $(taggedImage)
+    docker tag $(imageName) $(latestImage)
+    docker push $(dockerRepoId)/$(imageName)
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'push image to dockerhub'
