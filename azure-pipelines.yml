@@ -1,0 +1,26 @@
+# Docker image
+# Build a Docker image to deploy, run, or push to a container registry.
+# Add steps that use Docker Compose, tag images, push to a registry, run an image, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+pool:
+  vmImage: 'Ubuntu 16.04'
+
+variables:
+  image.version: '2.0'
+  imageName: 'educast_base:$(build.buildId)'
+  taggedImage: 'educast_base:$(image.version)'
+  latestImage: 'educast_base:latest'
+
+steps:
+- script: docker build -f Dockerfile -t $(imageName) .
+  displayName: 'build image'
+- script: docker run -t $(imageName) ffmpeg -buildconf
+  displayName: 'validate built image'
+- script: |
+    docker login -u $(dockerId) -p $(dockerPassword)
+    docker tag $(imageName) $(taggedImage)
+    docker tag $(imageName) $(latestImage)
+    docker push $(dockerRepoId)/$(imageName)
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'push image to dockerhub'
