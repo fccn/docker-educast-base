@@ -21,7 +21,7 @@ steps:
     docker login -u $(dockerId) -p $(dockerPassword)
     docker tag $(imageName) $(dockerRepoId)/$(taggedImage)
     docker tag $(imageName) $(dockerRepoId)/$(latestImage)
-    docker push $(dockerRepoId)/$(imageName)
-    docker push $(dockerRepoId)/$(imageName)
+    docker push $(dockerRepoId)/$(taggedImage)
+    docker push $(dockerRepoId)/$(latestImage)
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   displayName: 'push image to dockerhub'
