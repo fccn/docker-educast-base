@@ -4,7 +4,7 @@
 # - sets timezone to Europe/Lisbon
 # - creates educast user and group
 #------
-FROM        alpine:3.5 AS build
+FROM        alpine:3.8 AS build
 
 WORKDIR     /tmp/workdir
 
@@ -66,6 +66,7 @@ RUN     buildDeps="autoconf \
                    openssl-dev \
                    tar \
                    yasm \
+                   fontconfig-dev \
                    zlib-dev" && \
         apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
 
@@ -252,16 +253,16 @@ RUN  \
         make install && \
         rm -rf ${DIR}
 ## fontconfig https://www.freedesktop.org/wiki/Software/fontconfig/
-RUN  \
-        DIR=/tmp/fontconfig && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&\
-        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
-        ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
+#RUN  \
+#        DIR=/tmp/fontconfig && \
+#        mkdir -p ${DIR} && \
+#        cd ${DIR} && \
+#        curl -sLO https://www.freedesktop.org/software/fontconfig/release/fontconfig-${FONTCONFIG_VERSION}.tar.bz2 &&\
+#        tar -jx --strip-components=1 -f fontconfig-${FONTCONFIG_VERSION}.tar.bz2 && \
+#        ./configure -prefix="${PREFIX}" --disable-static --enable-shared && \
+#        make && \
+#        make install && \
+#        rm -rf ${DIR}
 ## libass https://github.com/libass/libass
 RUN  \
         DIR=/tmp/libass && \

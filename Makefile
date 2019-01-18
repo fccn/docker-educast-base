@@ -52,4 +52,3 @@ tag-version: ## Generate container `latest` tag
 
 version: ## Output the current version
 	@echo $(VERSION)
-
