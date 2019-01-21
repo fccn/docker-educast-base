@@ -4,7 +4,7 @@
 # - sets timezone to Europe/Lisbon
 # - creates educast user and group
 #------
-FROM        alpine:3.5 AS build
+FROM        alpine:3.8 AS build
 
 WORKDIR     /tmp/workdir
 
@@ -68,8 +68,12 @@ RUN     buildDeps="autoconf \
                    yasm \
                    fontconfig-dev \
                    zlib-dev" && \
-        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0
+        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 \
+		&& mkdir -p /tmp/patches
 
+## add patches
+COPY ./patches /tmp/patches
+		
 ## opencore-amr https://sourceforge.net/projects/opencore-amr/
 RUN \
         DIR=/tmp/opencore-amr && \
@@ -150,6 +154,11 @@ RUN \
         curl -sLO http://downloads.xiph.org/releases/theora/libtheora-${THEORA_VERSION}.tar.gz && \
         echo ${THEORA_SHA256SUM} | sha256sum --check && \
         tar -zx --strip-components=1 -f libtheora-${THEORA_VERSION}.tar.gz && \
+### apply patch
+        echo "patching theora lib..." && \
+		cp /tmp/patches/png2theora.patch ${DIR}/examples/png2theora.patch && \
+		cd ${DIR}/examples && patch < png2theora.patch && cd ${DIR} && \
+		echo "finished patching, compiling lib" && \
         ./configure --prefix="${PREFIX}" --with-ogg="${PREFIX}" --enable-shared && \
         make && \
         make install && \
