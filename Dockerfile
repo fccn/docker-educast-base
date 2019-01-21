@@ -4,7 +4,7 @@
 # - sets timezone to Europe/Lisbon
 # - creates educast user and group
 #------
-FROM        alpine:3.8 AS build
+FROM        alpine:3.5 AS build
 
 WORKDIR     /tmp/workdir
 
