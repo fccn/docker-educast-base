@@ -395,4 +395,4 @@ COPY --from=build /tmp/fakeroot/ /
 
 # sanity tests
 RUN ["ffmpeg", "-version"]
-RUN ["ffprobe", "-version"]
+RUN ["ffprobe", "-buildconf"]
