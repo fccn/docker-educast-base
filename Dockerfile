@@ -67,6 +67,7 @@ RUN     buildDeps="autoconf \
                    tar \
                    yasm \
                    fontconfig-dev \
+				   freetype-dev \
                    zlib-dev" && \
         apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 \
 		&& mkdir -p /tmp/patches
@@ -223,17 +224,17 @@ RUN \
         make install && \
         rm -rf ${DIR}
 ## freetype https://www.freetype.org/
-RUN  \
-        DIR=/tmp/freetype && \
-        mkdir -p ${DIR} && \
-        cd ${DIR} && \
-        curl -sLO http://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz && \
-        echo ${FREETYPE_SHA256SUM} | sha256sum --check && \
-        tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
-        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
-        make && \
-        make install && \
-        rm -rf ${DIR}
+#RUN  \
+#        DIR=/tmp/freetype && \
+#        mkdir -p ${DIR} && \
+#        cd ${DIR} && \
+#        curl -sLO http://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERSION}.tar.gz && \
+#        echo ${FREETYPE_SHA256SUM} | sha256sum --check && \
+#        tar -zx --strip-components=1 -f freetype-${FREETYPE_VERSION}.tar.gz && \
+#        ./configure --prefix="${PREFIX}" --disable-static --enable-shared && \
+#        make && \
+#        make install && \
+#        rm -rf ${DIR}
 ## libvstab https://github.com/georgmartius/vid.stab
 RUN  \
         DIR=/tmp/vid.stab && \
@@ -383,7 +384,7 @@ ENV TZ=Europe/Lisbon
 
 # Change TimeZone
 RUN apk --no-cache add ca-certificates && update-ca-certificates \
-  && apk add --update tzdata \
+  && apk add --update tzdata freetype \
   && cp /usr/share/zoneinfo/Europe/Lisbon /etc/localtime \
   && rm -rf /var/cache/apk/*
 

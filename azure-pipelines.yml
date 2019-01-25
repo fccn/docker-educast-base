@@ -7,7 +7,7 @@ pool:
   vmImage: 'Ubuntu 16.04'
 
 variables:
-  image.version: '2.1.3'
+  image.version: '2.1.4'
   imageName: 'educast_base:$(build.buildId)'
   taggedImage: 'educast_base:$(image.version)'
   latestImage: 'educast_base:latest'
