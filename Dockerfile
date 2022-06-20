@@ -4,7 +4,7 @@
 # - sets timezone to Europe/Lisbon
 # - creates educast user and group
 #------
-FROM        alpine:3.8 AS build
+FROM        alpine:3.13 AS build
 
 WORKDIR     /tmp/workdir
 
@@ -62,14 +62,20 @@ RUN     buildDeps="autoconf \
                    gperf \
                    libtool \
                    make \
-                   python \
+                   python2 \
                    openssl-dev \
                    tar \
                    yasm \
+                   patch \
                    fontconfig-dev \
-				   freetype-dev \
-                   zlib-dev" && \
-        apk  add --update ${buildDeps} libgcc libstdc++ ca-certificates libcrypto1.0 libssl1.0 \
+                   freetype-dev \
+                   zlib-dev \
+                   libstdc++ \
+                   ca-certificates \
+                   libcrypto1.1 \
+                   build-base \
+                   libssl1.1" && \
+        apk  add --update ${buildDeps} \
 		&& mkdir -p /tmp/patches
 
 ## add patches
@@ -369,7 +375,7 @@ RUN \
         LD_LIBRARY_PATH=/tmp/fakeroot/lib /tmp/fakeroot/bin/ffmpeg -buildconf
 
 ### Release Stage
-FROM ruby:2.4-alpine3.8 AS educast_base
+FROM ruby:2.5.9-alpine3.13 AS educast_base
 LABEL maintainer="Paulo Costa <paulo.costa@fccn.pt>"
 
 #add testing and community repositories
